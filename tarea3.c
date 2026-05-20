@@ -6,7 +6,7 @@
 #include <string.h>
 #include <time.h>
 
-
+//hoila
 
 // Definición de la estructura para el estado del puzzle
 typedef struct {
