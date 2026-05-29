@@ -41,8 +41,8 @@ void imprimirEstado(const State *state) {
     
     int x_aux = 0; 
     int y_aux = 0;
-    int caminito[N][N] = {0};
-    int *action = list_first(state->actions);
+    int caminito[N][N] = {0}; // esto crea un laberinto auxiliar para rastrear el camino que siguió el algoritmo
+    int *action = list_first(state->actions); // parte de la primera accion
     
     while(action != NULL) {
         if(*action == 1){ // ARRIBA: entonces se le resta 1 a la fila
@@ -55,7 +55,7 @@ void imprimirEstado(const State *state) {
         else if(*action == 4) { // DERECHA: entonces se le suma 1 a la columna
             y_aux++;
         }
-        caminito[x_aux][y_aux] = -1;
+        caminito[x_aux][y_aux] = -1; // marca el camino con -1 en el laberinto auxiliar
         action = list_next(state->actions);
     }
     for (int i = 0; i < N; i++) {
@@ -70,7 +70,7 @@ void imprimirEstado(const State *state) {
         }
         printf("\n");
     }
-    if(state->steps != 0) {
+    if(state->steps != 0) {  // Si se mueve imprime la cantidad de pasos que se movió
         printf("Cantidad de pasos = %i\n", state->steps);
     }
 }
@@ -199,7 +199,7 @@ void deep_first_search(State* state, int *iteraciones) { // busqueda por profund
 
 void breadth_first_search(State* state, int* iteraciones){ // aca hace lo mismo que arriba pero con una cola en vez de una pila, es lo mismo mismo
     //COLAA
-    Queue *Cola = queue_create(Cola);
+    Queue *Cola = queue_create(Cola); 
     queue_insert(Cola, state);
 
     int maze_aux[N][N] = {0};
@@ -297,7 +297,7 @@ int main() {
         puts("0) Glosario de grafico");
         puts("1) Búsqueda en Profundidad");
         puts("2) Buscar en Anchura");
-        puts("3) Buscar Mejor Primero");
+        puts("3) Buscar A*");
         puts("4) Salir");
 
         printf("Ingrese su opción: ");
@@ -315,12 +315,12 @@ int main() {
             case '2':
                 int iteracionesBFS = 0;
                 breadth_first_search(&estado_inicial, &iteracionesBFS);
-                printf("Cantidad de iteraciones = %i\n", iteracionesBFS);
+                printf("Cantidad de iteraciones = %i\n", iteracionesBFS); // este lo mismo de arriba
                 break;
             case '3':
                 int iteracionesAstar = 0;
                 busqueda_Astar(&estado_inicial, &iteracionesAstar);
-                printf("Cantidad de iteraciones = %i\n", iteracionesAstar);
+                printf("Cantidad de iteraciones = %i\n", iteracionesAstar); // este lo mismo de arriba
                 break;
         }
 
