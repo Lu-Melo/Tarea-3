@@ -9,8 +9,6 @@
 #include <string.h>
 #include <time.h>
 
-//hoila
-
 // Definición de la estructura para el estado del puzzle
 typedef struct {
     int maze[N][N]; // Matriz NxN que representa el tablero
@@ -92,13 +90,7 @@ bool is_final_state(State *state){
 }
 
 State *transition(State *state, int action){ // funcion revisa si el estado puede ir en esa direccion y devuelve ese estado avanzando en esa direccion
-    // arriba=1, abajo=2, izquierda=3, derecha=4
-    /* guia visual borrar dsp:
-    [11][12][13]      
-    [21][22][23]
-    [31][32][33]
-    */
-    // N = 10 por si acaso esta en el extra.h borrar dsp
+                            // arriba=1, abajo=2, izquierda=3, derecha=4 (╯°□°）╯
     int x_aux = state->x; // crea una copia de las coords a las que se va a mover
     int y_aux = state->y;
     
@@ -137,7 +129,7 @@ State *transition(State *state, int action){ // funcion revisa si el estado pued
         list_pushBack(estado_aux->actions, action_aux);
         action_primero = list_next(state->actions);
     }
-    int *action_ahora = (int*) malloc(sizeof(int)); // crea la copia como puntero para tirarla a la lista de nodos adjacentes y que no se borre cuando se acabe la funcion (caché a la mala que pasaba)
+    int *action_ahora = (int*) malloc(sizeof(int)); // crea la copia como puntero para tirarla a la lista de nodos adjacentes y que no se borre cuando se acabe la funcion (caché a la mala que pasaba (ಥ﹏ಥ) )
     *action_ahora = action;
     list_pushBack(estado_aux->actions, action_ahora); // le agrega la nueva accion a la lista de acciones
     return estado_aux; // retorna el nuevo estadeins
@@ -192,12 +184,17 @@ void deep_first_search(State* state, int *iteraciones) { // busqueda por profund
             stack_push(Duracell, adj_aux);
             adj_aux = list_next(vecinitos);
         }
+        if(aux != state) { // y se libera el auxiliar si no es el mismo estado que recive del main para no borrar la variable local que se manda a la función
+            free(aux);
+        }
     }
+    
     printf("No se encontro ningun camino disponible\n"); // si nunca se llegó a la meta no funcionó la busqueda
     return;
 }
 
-void breadth_first_search(State* state, int* iteraciones){ // aca hace lo mismo que arriba pero con una cola en vez de una pila, es lo mismo mismo
+void breadth_first_search(State* state, int* iteraciones){ // busqueda en anchura, aca hace lo mismo que arriba pero con una cola en vez de una pila, 
+                                                           // es lo mismo que arriba asi q no veo necesario comentarlo ┐( ͡ಠ ʖ̯ ͡ಠ)┌
     //COLAA
     Queue *Cola = queue_create(Cola); 
     queue_insert(Cola, state);
@@ -223,12 +220,16 @@ void breadth_first_search(State* state, int* iteraciones){ // aca hace lo mismo 
             queue_insert(Cola, adj_aux);
             adj_aux = list_next(vecinitos);
         }
+        if(aux != state) {
+            free(aux);
+        }
     }
+    
     printf("No se encontro ningun camino disponible\n");
     return;
 }
 
-void busqueda_Astar(State* state, int* iteraciones){ //aca hace lo mismo que las de arriba pero con un heap
+void busqueda_Astar(State* state, int* iteraciones){ // Busqueda A*, aca hace lo mismo que las de arriba pero con un heap, aqui ya cambia la cosa asi que lo comento
     //HEAPPP
     Heap *heap = heap_create(heap); // se crea el heap
     heap_push(heap, state, ( state->steps + distancia_L1(state) ) * -1); // se le pone un elemento con prioridad de la distancia y los pasos que lleva, en negativo porque queremos la menor distancia total
@@ -255,7 +256,11 @@ void busqueda_Astar(State* state, int* iteraciones){ //aca hace lo mismo que las
             heap_push(heap, adj_aux, ( adj_aux->steps + distancia_L1(adj_aux) ) * -1); // pone los vecinos con prioridad de quien tiene menos distancia de la meta y ocupe menos pasos para llegar, para que revise los que tienen menos distancia total primero
             adj_aux = list_next(vecinitos); // sigue recorriendo la lista de vecinitos
         }
+        if(aux != state) { // y se libera el auxiliar si no es el mismo estado que recive del main para no borrar la variable local que se manda a la función
+            free(aux);
+        }
     }
+    
     printf("No se encontro ningun camino disponible\n"); // si nunca llegó a la meta no se pudo encontrar solucion pipipi
     
     return;
